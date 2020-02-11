@@ -11,6 +11,8 @@ import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.User;
 import site.okliu.newvision.provider.GithubProvider;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
@@ -33,7 +35,7 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name="state") String state,
-                           HttpSession session){
+                           HttpServletResponse response){
         System.out.println("code = " + code);
         System.out.println("state = " + state);
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -47,14 +49,14 @@ public class AuthorizeController {
         System.out.println("githubUser.getName() = " + githubUser.getName());
         if(githubUser != null){
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModify(user.getGmtCreate());
             userMapper.insert(user);
-            //登录成功，写cookie和session
-            session.setAttribute("user",githubUser);
+            response.addCookie(new Cookie("token",token));
             return "redirect:/";
         }else{
             //登录失败，重新登录
