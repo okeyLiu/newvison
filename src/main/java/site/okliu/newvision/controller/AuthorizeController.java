@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.AccessTokenDTO;
 import site.okliu.newvision.dto.GithubUser;
+import site.okliu.newvision.mapper.UserMapper;
+import site.okliu.newvision.model.User;
 import site.okliu.newvision.provider.GithubProvider;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 @Controller
 public class AuthorizeController {
@@ -25,6 +27,9 @@ public class AuthorizeController {
     @Value("${github.client.redirect_uri}")
     private String redirectUri;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name="state") String state,
@@ -38,11 +43,18 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser user = githubProvider.getUser(accessToken);
-        System.out.println("user.getName() = " + user.getName());
-        if(user != null){
+        GithubUser githubUser = githubProvider.getUser(accessToken);
+        System.out.println("githubUser.getName() = " + githubUser.getName());
+        if(githubUser != null){
+            User user = new User();
+            user.setToken(UUID.randomUUID().toString());
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModify(user.getGmtCreate());
+            userMapper.insert(user);
             //登录成功，写cookie和session
-            session.setAttribute("user",user);
+            session.setAttribute("user",githubUser);
             return "redirect:/";
         }else{
             //登录失败，重新登录
