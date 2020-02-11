@@ -12,3 +12,9 @@
 
 ## 工具
 [Visual Paradigm](https://www.visual-paradigm.com/cn/)
+
+## 命令
+```bash
+# flayway
+mvn flyway:migrate
+```
