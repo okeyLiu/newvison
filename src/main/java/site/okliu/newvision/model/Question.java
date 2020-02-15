@@ -5,15 +5,15 @@ import lombok.Data;
 @Data
 public class Question {
 
-  private long id;
+  private Long id;
   private String title;
   private String description;
-  private long gmtCreate;
-  private long gmtModify;
-  private long creator;
-  private long commentCount;
-  private long viewConunt;
-  private long likeCount;
+  private Long gmtCreate;
+  private Long gmtModify;
+  private Long creator;
+  private Long commentCount;
+  private Long viewConunt;
+  private Long likeCount;
   private String tag;
 
 }
