@@ -10,8 +10,8 @@ import site.okliu.newvision.mapper.QuestionMapper;
 import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.Question;
 import site.okliu.newvision.model.User;
+import site.okliu.newvision.provider.CookieProvider;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -25,19 +25,7 @@ public class PublishController {
     @GetMapping("/publish")
     public String publish(HttpServletRequest request) {
         System.out.println("publish...");
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
+        CookieProvider.getUserAndPutInSessionFromCookies(request,userMapper);
         return "publish";
     }
 
@@ -63,20 +51,7 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
+        User user = CookieProvider.getUserAndPutInSessionFromCookies(request,userMapper);
         if (user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";
