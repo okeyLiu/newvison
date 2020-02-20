@@ -8,15 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.PaginationDTO;
 import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.service.QuestionService;
-import site.okliu.newvision.provider.CookieProvider;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class IndexController {
 
-    @Autowired
-    private UserMapper userMapper;
     @Autowired
     private QuestionService questionService;
 
@@ -26,7 +23,6 @@ public class IndexController {
                         @RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "3") Integer size
     ) {
-        CookieProvider.getUserAndPutInSessionFromCookies(request, userMapper);
         PaginationDTO pagination = questionService.list(page, size);
         model.addAttribute("pagination", pagination);
         return "index";

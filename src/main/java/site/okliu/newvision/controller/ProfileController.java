@@ -8,31 +8,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.PaginationDTO;
-import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.User;
-import site.okliu.newvision.provider.CookieProvider;
 import site.okliu.newvision.service.QuestionService;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private QuestionService questionService;
-
 
     @GetMapping("/{action}")
     public String profile(
             @PathVariable String action,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "3") Integer size,
-            HttpServletRequest request,
+            HttpSession session,
             Model model) {
-        User user = CookieProvider.getUserAndPutInSessionFromCookies(request, userMapper);
+        User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/";
         }
