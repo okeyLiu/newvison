@@ -24,7 +24,6 @@ public class PublishController {
 
     @GetMapping("/publish")
     public String publish(HttpServletRequest request) {
-        System.out.println("publish...");
         CookieProvider.getUserAndPutInSessionFromCookies(request,userMapper);
         return "publish";
     }
@@ -35,7 +34,6 @@ public class PublishController {
                             @RequestParam(value = "tag", required = false) String tag,
                             HttpServletRequest request,
                             Model model) {
-        System.out.println("post publish...");
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);

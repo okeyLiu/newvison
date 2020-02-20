@@ -35,8 +35,6 @@ public class AuthorizeController {
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name="state") String state,
                            HttpServletResponse response){
-        System.out.println("code = " + code);
-        System.out.println("state = " + state);
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
