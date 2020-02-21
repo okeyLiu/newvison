@@ -10,9 +10,11 @@ import site.okliu.newvision.dto.GithubUser;
 import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.User;
 import site.okliu.newvision.provider.GithubProvider;
+import site.okliu.newvision.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Controller
@@ -29,7 +31,7 @@ public class AuthorizeController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -49,21 +51,23 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModify(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatar_url());
-            User byAccountId = userMapper.findByAccountId(user.getAccountId());
-            if(byAccountId == null){
-                userMapper.insert(user);
-                response.addCookie(new Cookie("token",token));
-            }else{
-                response.addCookie(new Cookie("token",byAccountId.getToken()));
-            }
+            userService.createOrUpdate(user);
+            response.addCookie(new Cookie("token",token));
             return "redirect:/";
         }else{
             //登录失败，重新登录
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session,HttpServletResponse response){
+        session.removeAttribute("user");
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 
 }

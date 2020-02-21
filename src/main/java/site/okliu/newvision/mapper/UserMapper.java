@@ -1,13 +1,8 @@
 package site.okliu.newvision.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.*;
 import site.okliu.newvision.model.User;
 
-@Repository// 只是为了idea的@AutoWired不报红线
 @Mapper
 public interface UserMapper {
 
@@ -22,4 +17,7 @@ public interface UserMapper {
 
     @Select("select * from user where account_id=#{accountId}")
     User findByAccountId(@Param("accountId") String accountId);
+
+    @Update("update user set name=#{name}, gmt_modify=#{gmtModify}, avatar_url=#{avatarUrl}, token=#{token} where id=#{id}")
+    void update(User user);
 }

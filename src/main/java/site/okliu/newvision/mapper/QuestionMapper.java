@@ -4,12 +4,11 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Repository;
+import site.okliu.newvision.dto.QuestionDTO;
 import site.okliu.newvision.model.Question;
 
 import java.util.List;
 
-@Repository// 只是为了idea的@AutoWired不报红线
 @Mapper
 public interface QuestionMapper {
 
@@ -27,4 +26,7 @@ public interface QuestionMapper {
 
     @Select("select count(1) from question where creator=${userId}")
     Integer countByUserId(@Param("userId") Long userId);
+
+    @Select("select * from question where id=${id}")
+    Question findById(@Param("id") Long id);
 }

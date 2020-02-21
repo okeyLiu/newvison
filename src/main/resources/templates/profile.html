@@ -13,17 +13,14 @@
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main profile">
     <div class="row">
-        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span th:text="${sectionName}">我的问题</span></h2>
             <hr/>
             <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
-                    <a href="#">
-
-                    </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}">怎么快速学会SpringBoot开发</h4>
+                    <a th:href="@{'/question/'+${question.id}}"><h4 class="media-heading" th:text="${question.title}"></h4></a>
                     <span class="text-desc"><span th:text="${question.commentCount}">2</span>个回复·<span th:text="${question.viewConunt}">31</span>次浏览·<span th:text="${T(site.okliu.newvision.utils.TimeUtils).relationTime(question.gmtCreate)}">1小时前</span></span>
                 </div>
             </div>
@@ -53,7 +50,7 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="list-group section">
                 <a href="/profile/questions" th:class="${section=='questions'?'list-group-item active':'list-group-item'}">
                     我的提问
