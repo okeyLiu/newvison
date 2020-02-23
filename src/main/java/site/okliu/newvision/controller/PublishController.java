@@ -3,30 +3,41 @@ package site.okliu.newvision.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import site.okliu.newvision.mapper.QuestionMapper;
+import org.springframework.web.bind.annotation.*;
+import site.okliu.newvision.dto.QuestionDTO;
 import site.okliu.newvision.model.Question;
 import site.okliu.newvision.model.User;
+import site.okliu.newvision.service.QuestionService;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/publish")
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
 
-    @GetMapping("/publish")
+    @GetMapping("")
     public String publish() {
         return "publish";
     }
 
-    @PostMapping("/publish")
+    @GetMapping("/{id}")
+    public String edit(@PathVariable("id") Long id, Model model) {
+        QuestionDTO question = questionService.findById(id);
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
+        return "publish";
+    }
+
+    @PostMapping("")
     public String doPublish(@RequestParam(value = "title", required = false) String title,
                             @RequestParam(value = "description", required = false) String description,
                             @RequestParam(value = "tag", required = false) String tag,
+                            @RequestParam(value = "id", required = false) Long id,
                             HttpSession session,
                             Model model) {
         model.addAttribute("title", title);
@@ -56,7 +67,8 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModify(question.getGmtCreate());
-        questionMapper.create(question);
+        question.setId(id);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 
