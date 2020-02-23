@@ -7,7 +7,7 @@ create table question
 	GMT_MODIFY BIGINT,
 	creator int,
 	comment_count int default 0,
-	view_conunt int default 0,
+	view_count int default 0,
 	like_count int default 0,
 	tag varchar(255),
 	constraint question_pk

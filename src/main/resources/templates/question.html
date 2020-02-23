@@ -18,7 +18,7 @@
             <span class="text-desc">
             作者：<span th:text="${question.user.name}"></span>&nbsp;|
             时间：<span th:text="${T(site.okliu.newvision.utils.TimeUtils).relationTime(question.gmtCreate)}"></span>&nbsp;|
-            阅读数：<span th:text="${question.viewConunt}"></span>
+            阅读数：<span th:text="${question.viewCount}"></span>
             </span>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
             <div th:text="${question.description}"></div>

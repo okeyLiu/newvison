@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.AccessTokenDTO;
 import site.okliu.newvision.dto.GithubUser;
-import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.User;
 import site.okliu.newvision.provider.GithubProvider;
 import site.okliu.newvision.service.UserService;

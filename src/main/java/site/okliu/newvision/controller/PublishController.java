@@ -37,7 +37,7 @@ public class PublishController {
     public String doPublish(@RequestParam(value = "title", required = false) String title,
                             @RequestParam(value = "description", required = false) String description,
                             @RequestParam(value = "tag", required = false) String tag,
-                            @RequestParam(value = "id", required = false) Long id,
+                            @RequestParam(value = "id", required = false) Integer id,
                             HttpSession session,
                             Model model) {
         model.addAttribute("title", title);
@@ -68,8 +68,11 @@ public class PublishController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModify(question.getGmtCreate());
         question.setId(id);
+        question.setCommentCount(0);
+        question.setLikeCount(0);
+        question.setViewCount(0);
         questionService.createOrUpdate(question);
-        return "redirect:/";
+        return "redirect:/profile/questions";
     }
 
 }

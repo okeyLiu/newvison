@@ -25,6 +25,8 @@
 ```bash
 # flayway
 mvn flyway:migrate
+# mybatis generator
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ```
 
 

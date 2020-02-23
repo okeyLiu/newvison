@@ -1,0 +1,18 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="dsql" targetRuntime="MyBatis3DynamicSql">
+        <jdbcConnection driverClass="org.h2.Driver"
+                        connectionURL="jdbc:h2:D:/2-devtools/idea_space/newvision"
+                        userId="sa"
+                        password="123" />
+
+        <javaModelGenerator targetPackage="site.okliu.newvision.model" targetProject="src/main/java"/>
+
+        <javaClientGenerator targetPackage="site.okliu.newvision.mapper" targetProject="src/main/java"/>
+
+        <table tableName="user" />
+        <table tableName="question" />
+    </context>
+</generatorConfiguration>

@@ -5,15 +5,15 @@ import site.okliu.newvision.model.User;
 
 @Data
 public class QuestionDTO {
-    private Long id;
+    private Integer id;
     private String title;
     private String description;
     private Long gmtCreate;
     private Long gmtModify;
-    private Long creator;
-    private Long commentCount;
-    private Long viewConunt;
-    private Long likeCount;
+    private Integer creator;
+    private Integer commentCount;
+    private Integer viewCount;
+    private Integer likeCount;
     private String tag;
     private User user;
 }

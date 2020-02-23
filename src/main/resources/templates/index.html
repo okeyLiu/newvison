@@ -25,7 +25,7 @@
                 <div class="media-body">
                     <a th:href="@{'/question/'+${question.id}}"><h4 class="media-heading" th:text="${question.title}">怎么快速学会SpringBoot开发</h4></a>
                     <span th:text="${question.description}">点击学习 okliu 相关课程视频</span><br/>
-                    <span class="text-desc"><span th:text="${question.commentCount}">2</span>个回复·<span th:text="${question.viewConunt}">31</span>次浏览·<span th:text="${T(site.okliu.newvision.utils.TimeUtils).relationTime(question.gmtCreate)}">1小时前</span></span>
+                    <span class="text-desc"><span th:text="${question.commentCount}">2</span>个回复·<span th:text="${question.viewCount}">31</span>次浏览·<span th:text="${T(site.okliu.newvision.utils.TimeUtils).relationTime(question.gmtCreate)}">1小时前</span></span>
                 </div>
             </div>
             <nav aria-label="Page navigation">

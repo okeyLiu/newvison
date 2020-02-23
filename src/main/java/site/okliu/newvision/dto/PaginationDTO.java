@@ -17,7 +17,7 @@ public class PaginationDTO {
     private Integer totalPages;
     private Integer size;
 
-    public void setPaginationDTO(Integer count, Integer page, Integer size) {
+    public void setPaginationDTO(int count, Integer page, Integer size) {
         this.page = page;
         this.size = size;
         // 计算总页数
