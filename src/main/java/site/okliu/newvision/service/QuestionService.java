@@ -132,7 +132,6 @@ public class QuestionService {
             if (!question1.getCreator().equals(userId)) {
                 Integer viewCount = question1.getViewCount();
                 question1.setViewCount(++viewCount);
-                System.out.println("viewCount = " + viewCount);
                 questionMapper.updateByPrimaryKeySelective(question1);
             }
         } else {

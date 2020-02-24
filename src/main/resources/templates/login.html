@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>码农新视界</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/newvision.css"/>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container">
+    <form class="form-signin form-login">
+        <h2 class="form-signin-heading text-center">码农新视界 | 登录</h2>
+        <br>
+        <br>
+        <label for="inputEmail" class="">邮箱</label>
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <br>
+        <label for="inputPassword" class="">密码</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <br>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> 记住密码
+            </label>
+        </div>
+        <br>
+        <button class="btn btn-lg btn-primary btn-block disabled" type="submit">登录</button>
+        <br/>
+        <a class="link-no-line margin-right-10" href="/register">注册</a>
+        <a class="link-no-line margin-right-10" href="/tempLogin">使用测试账号登录</a>
+        <a class="link-no-line" href="https://github.com/login/oauth/authorize?client_id=7bf645a38f44fe2ea845&redirect_uri=http://localhost:8080/callback&scope=user&state=1">使用Github账号登录</a>
+    </form>
+</div> <!-- /container -->
+
+</body>
+</html>

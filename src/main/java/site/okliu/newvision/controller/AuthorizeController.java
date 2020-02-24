@@ -3,6 +3,7 @@ package site.okliu.newvision.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.AccessTokenDTO;
@@ -14,6 +15,8 @@ import site.okliu.newvision.service.UserService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -66,6 +69,21 @@ public class AuthorizeController {
     public String tempLogin(HttpServletResponse response){
         response.addCookie(new Cookie("token","00000000-0000-0000-0000-000000000000"));
         return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String toLoginPage(){
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String toRegisterPage(Model model){
+        List<String> icons = new ArrayList<>();
+        for (int i = 0; i <= 25 ; i++) {
+            icons.add("http://localhost:8080/images/icon-"+i+".jpg");
+        }
+        model.addAttribute("icons",icons);
+        return "register";
     }
 
     @GetMapping("/logout")

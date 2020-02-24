@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>码农新视界</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/newvision.css"/>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/newvision.js"></script>
+</head>
+<body>
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container">
+    <form class="form-signin form-register">
+        <h2 class="form-signin-heading text-center">码农新视界 | 注册</h2>
+        <br>
+        <br>
+        <label for="inputEmail">邮箱</label>
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <br>
+        <label for="inputNickname">昵称</label>
+        <input type="text" name="name" id="inputNickname" class="form-control" placeholder="Nickname" required>
+        <br>
+        <label for="inputPassword">密码</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <br>
+        <label for="reInputPassword">确认密码</label>
+        <input type="password" id="reInputPassword" class="form-control" placeholder="Repeat Password" required>
+        <br>
+        <div class="form-select-images">
+            <label for="selectIcon">选择头像</label>
+            <div>
+                <input type="hidden" name="icon"/>
+                <input type="button" id="selectIcon" class="form-control selected-btn" value="点击打开头像选择框" onclick="showIconsWindow()">
+                <img src="/images/default.jpg" class="selected-image" alt="未选择">
+            </div>
+            <div class="row" id="iconsWindow">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 icon-item" th:each="icon : ${icons}">
+                    <a href="javascript:;" onclick="save(this)" class="thumbnail">
+                        <img th:src="${icon}">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> 遵守协议<a href="">《码农新视界论坛使用注意事项》</a>
+            </label>
+        </div>
+        <br>
+        <button class="btn btn-lg btn-primary btn-block disabled" type="submit">注册</button>
+        <br/>
+        <a class="link-no-line margin-right-10" href="/login">登录</a>
+        <a class="link-no-line margin-right-10" href="/tempLogin">使用测试账号登录</a>
+        <a class="link-no-line" href="https://github.com/login/oauth/authorize?client_id=7bf645a38f44fe2ea845&redirect_uri=http://localhost:8080/callback&scope=user&state=1">使用Github账号登录</a>
+    </form>
+</div> <!-- /container -->
+
+</body>
+</html>

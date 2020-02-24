@@ -23,7 +23,13 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.findById(id);
         model.addAttribute("question", questionDTO);
         User user = (User) session.getAttribute("user");
-        questionService.updateViewCount(id,user.getId());
+        Integer userId;
+        if(user != null){
+            userId = user.getId();// 登录用户
+        }else{
+            userId = -1;// 游客
+        }
+        questionService.updateViewCount(id,userId);
         return "question";
     }
 

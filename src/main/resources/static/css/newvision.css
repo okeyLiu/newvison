@@ -30,10 +30,54 @@ body {
     color: #999;
 }
 
+.form-login{
+    margin: 30px auto;
+    width: 300px;
+}
+
+.form-register{
+    margin: 30px auto;
+    width: 300px;
+}
+
 .profile .section{
     margin-top: 15px;
 }
 
 .jumbotron{
     margin: 50px;
+}
+
+.link-no-line{
+    text-decoration: none;
+}
+
+.margin-right-10{
+    margin-right: 10px;
+}
+
+#iconsWindow{
+    display: none;
+    margin-top: 70px;
+    position: relative;
+    top: -50px;
+}
+
+.selected-btn{
+    width: 60%;
+}
+
+.selected-image{
+    width: 72px;
+    height: 72px;
+    float: right;
+    position: relative;
+    top: -70px;
+    border-radius: 36px;
+    border: 1px solid black;
+}
+
+.icon-item{
+    margin-top: 25px;
+    height: 70px;
 }
