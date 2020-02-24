@@ -25,6 +25,8 @@
                     <li><a href="/publish">发布</a></li>
                     <li th:if="${session.user == null}"><a
                             href="https://github.com/login/oauth/authorize?client_id=7bf645a38f44fe2ea845&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
+                    <li th:if="${session.user == null}"><a
+                            href="/tempLogin">临时登录</a>
                     </li>
                     <li th:if="${session.user != null}" class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

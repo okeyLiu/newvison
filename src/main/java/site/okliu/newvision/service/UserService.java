@@ -32,7 +32,7 @@ public class UserService {
             user2.setName(user1.getName());
             user2.setAvatarUrl(user1.getAvatarUrl());
             user2.setGmtModify(System.currentTimeMillis());
-            userMapper.updateByPrimaryKey(user2);
+            userMapper.updateByPrimaryKeySelective(user2);// 使用选择的值进行更新
         }else{
             // 插入
             user1.setGmtCreate(System.currentTimeMillis());

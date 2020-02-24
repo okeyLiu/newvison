@@ -59,6 +59,14 @@ public class AuthorizeController {
             return "redirect:/";
         }
     }
+    /***********************
+     * 临时测试使用，无网环境  *
+     ***********************/
+    @GetMapping("/tempLogin")
+    public String tempLogin(HttpServletResponse response){
+        response.addCookie(new Cookie("token","00000000-0000-0000-0000-000000000000"));
+        return "redirect:/";
+    }
 
     @GetMapping("/logout")
     public String logout(HttpSession session,HttpServletResponse response){

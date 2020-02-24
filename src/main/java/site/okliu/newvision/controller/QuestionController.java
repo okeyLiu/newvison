@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import site.okliu.newvision.dto.QuestionDTO;
+import site.okliu.newvision.model.User;
 import site.okliu.newvision.service.QuestionService;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/question")
@@ -16,9 +19,11 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/{id}")
-    public String question(@PathVariable("id") Long id, Model model) {
+    public String question(@PathVariable("id") Integer id, Model model, HttpSession session) {
         QuestionDTO questionDTO = questionService.findById(id);
         model.addAttribute("question", questionDTO);
+        User user = (User) session.getAttribute("user");
+        questionService.updateViewCount(id,user.getId());
         return "question";
     }
 
