@@ -17,14 +17,14 @@ public class PaginationDTO {
     private Integer totalPages;
     private Integer size;
 
-    public void setPaginationDTO(int count, Integer page, Integer size) {
+    public void setPaginationDTO(long count, Integer page, Integer size) {
         this.page = page;
         this.size = size;
         // 计算总页数
         if (count % size == 0) {
-            totalPages = count / size;
+            totalPages = Math.toIntExact(count / size);
         } else {
-            totalPages = count / size + 1;
+            totalPages = Math.toIntExact(count / size + 1);
         }
         // 优化参数
         if(page<1){

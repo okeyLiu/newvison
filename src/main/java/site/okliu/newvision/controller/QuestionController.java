@@ -19,15 +19,15 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/{id}")
-    public String question(@PathVariable("id") Integer id, Model model, HttpSession session) {
+    public String question(@PathVariable("id") Long id, Model model, HttpSession session) {
         QuestionDTO questionDTO = questionService.findById(id);
         model.addAttribute("question", questionDTO);
         User user = (User) session.getAttribute("user");
-        Integer userId;
+        Long userId;
         if(user != null){
             userId = user.getId();// 登录用户
         }else{
-            userId = -1;// 游客
+            userId = -1L;// 游客
         }
         questionService.updateViewCount(id,userId);
         return "question";

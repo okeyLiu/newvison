@@ -24,7 +24,7 @@ public class PublishController {
     }
 
     @GetMapping("/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model) {
+    public String edit(@PathVariable("id") Long id, Model model) {
         QuestionDTO question = questionService.findById(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
@@ -37,7 +37,7 @@ public class PublishController {
     public String doPublish(@RequestParam(value = "title", required = false) String title,
                             @RequestParam(value = "description", required = false) String description,
                             @RequestParam(value = "tag", required = false) String tag,
-                            @RequestParam(value = "id", required = false) Integer id,
+                            @RequestParam(value = "id", required = false) Long id,
                             HttpSession session,
                             Model model) {
         model.addAttribute("title", title);
@@ -65,12 +65,7 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModify(question.getGmtCreate());
         question.setId(id);
-        question.setCommentCount(0);
-        question.setLikeCount(0);
-        question.setViewCount(0);
         questionService.createOrUpdate(question);
         return "redirect:/profile/questions";
     }

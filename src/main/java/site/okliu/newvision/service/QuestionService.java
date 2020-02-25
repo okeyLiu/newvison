@@ -1,12 +1,5 @@
 package site.okliu.newvision.service;
 
-import org.mybatis.dynamic.sql.render.RenderingStrategies;
-import org.mybatis.dynamic.sql.select.SelectModel;
-import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
-import org.mybatis.dynamic.sql.update.UpdateDSL;
-import org.mybatis.dynamic.sql.update.UpdateDSLCompleter;
-import org.mybatis.dynamic.sql.update.UpdateModel;
-import org.mybatis.dynamic.sql.util.Buildable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +7,7 @@ import site.okliu.newvision.dto.PaginationDTO;
 import site.okliu.newvision.dto.QuestionDTO;
 import site.okliu.newvision.exception.CustomizeErrorCode;
 import site.okliu.newvision.exception.CustomizeException;
+import site.okliu.newvision.mapper.QuestionExtMapper;
 import site.okliu.newvision.mapper.QuestionMapper;
 import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.Question;
@@ -23,25 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mybatis.dynamic.sql.SqlBuilder.*;
-import static site.okliu.newvision.mapper.QuestionDynamicSqlSupport.*;
-import static site.okliu.newvision.mapper.QuestionDynamicSqlSupport.viewCount;
-
 @Service
 public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
     @Autowired
+    private QuestionExtMapper questionExtMapper;
+    @Autowired
     private UserMapper userMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        SelectStatementProvider countSelect = select(count())
-                .from(question)
-                .build().render(RenderingStrategies.MYBATIS3);
-        long count = questionMapper.count(countSelect);
-        paginationDTO.setPaginationDTO(Math.toIntExact(count), page, size);
+        paginationDTO.setPaginationDTO(questionExtMapper.countQuestions(), page, size);
         // 优化参数
         if (page < 1) {
             page = 1;
@@ -51,13 +39,7 @@ public class QuestionService {
         }
         Integer offset = size * (page - 1);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        SelectStatementProvider pageSelect = select(question.allColumns())
-                .from(question)
-                .orderBy(gmtModify.descending())// descending() 降序
-                .limit(size)
-                .offset(offset)
-                .build().render(RenderingStrategies.MYBATIS3);
-        List<Question> list = questionMapper.selectMany(pageSelect);
+        List<Question> list = questionExtMapper.list(size,offset);
         for (Question question : list) {
             User user = userMapper.selectByPrimaryKey(question.getCreator()).get();
             QuestionDTO questionDTO = new QuestionDTO();
@@ -69,12 +51,9 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        SelectStatementProvider countByUserId = select(count()).from(question).where(creator, isEqualTo(userId)).build().render(RenderingStrategies.MYBATIS3);
-        ;
-        Integer count = Math.toIntExact(questionMapper.count(countByUserId));
-        paginationDTO.setPaginationDTO(count, page, size);
+        paginationDTO.setPaginationDTO(questionExtMapper.countQuestionsByUserId(userId), page, size);
         // 优化参数
         if (page < 1) {
             page = 1;
@@ -84,14 +63,7 @@ public class QuestionService {
         }
         Integer offset = size * (page - 1);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        SelectStatementProvider pageSelect = select(question.allColumns())
-                .from(question)
-                .where(creator, isEqualTo(userId))
-                .orderBy(gmtModify.descending())// descending() 降序
-                .limit(size)
-                .offset(offset)
-                .build().render(RenderingStrategies.MYBATIS3);
-        List<Question> list = questionMapper.selectMany(pageSelect);
+        List<Question> list = questionExtMapper.listByUserId(userId,size,offset);
         for (Question qes : list) {
             User u1 = userMapper.selectByPrimaryKey(qes.getCreator()).get();
             QuestionDTO questionDTO = new QuestionDTO();
@@ -103,7 +75,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO findById(Integer id) {
+    public QuestionDTO findById(Long id) {
         Optional<Question> questionOptional = questionMapper.selectByPrimaryKey(id);
         if (!questionOptional.isPresent()) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -119,27 +91,26 @@ public class QuestionService {
     public void createOrUpdate(Question questionObj) {
         if (questionObj.getId() != null) {
             // 更新
-            questionObj.setGmtModify(questionObj.getGmtCreate());
+            questionObj.setGmtModify(System.currentTimeMillis());
             questionMapper.updateByPrimaryKeySelective(questionObj);
         } else {
             // 新增
             questionObj.setGmtCreate(System.currentTimeMillis());
             questionObj.setGmtModify(questionObj.getGmtCreate());
+            questionObj.setViewCount(0);
+            questionObj.setLikeCount(0);
+            questionObj.setCommentCount(0);
             questionMapper.insert(questionObj);
         }
     }
 
-    public void updateViewCount(Integer questionId, Integer userId) {
+    public void updateViewCount(Long questionId, Long userId) {
         Optional<Question> questionOptional = questionMapper.selectByPrimaryKey(questionId);
         if (questionOptional.isPresent()) {
             Question question1 = questionOptional.get();
             // 只有不是问题的创建者(未登录用户、游客)才增加阅读数
             if (!question1.getCreator().equals(userId)) {
-                // 此处使用“view_count+1” 含义是 使用执行数据库是 view_count 列的值+1，避免并发错误
-                questionMapper.update(c ->
-                        c.set(viewCount).equalToConstant("view_count+1")
-                                .where(id, isEqualTo(questionId))
-                );
+                questionExtMapper.incViewCount(questionId);
             }
         } else {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);

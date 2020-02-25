@@ -14,5 +14,6 @@
 
         <table tableName="user" />
         <table tableName="question" />
+        <table tableName="comment" />
     </context>
 </generatorConfiguration>

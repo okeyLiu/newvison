@@ -18,7 +18,7 @@
 [GHelper访问Google](https://www.wonxun.net/share/426)
 [GHelper插件下载:提取码: 6b7u](https://pan.baidu.com/s/1h_F_lPUjTTC3bl7NtGBadA)
 [LiveReload](http://livereload.com/extensions/)
-
+[Postman](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en)
 
 
 ## 命令
