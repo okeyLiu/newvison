@@ -1,7 +1,12 @@
 package site.okliu.newvision.service;
 
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.SelectModel;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
+import org.mybatis.dynamic.sql.update.UpdateDSL;
+import org.mybatis.dynamic.sql.update.UpdateDSLCompleter;
+import org.mybatis.dynamic.sql.update.UpdateModel;
+import org.mybatis.dynamic.sql.util.Buildable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -128,11 +133,13 @@ public class QuestionService {
         Optional<Question> questionOptional = questionMapper.selectByPrimaryKey(questionId);
         if (questionOptional.isPresent()) {
             Question question1 = questionOptional.get();
-            // 只有不是问题的创建者才增加阅读数
+            // 只有不是问题的创建者(未登录用户、游客)才增加阅读数
             if (!question1.getCreator().equals(userId)) {
-                Integer viewCount = question1.getViewCount();
-                question1.setViewCount(++viewCount);
-                questionMapper.updateByPrimaryKeySelective(question1);
+                // 此处使用“view_count+1” 含义是 使用执行数据库是 view_count 列的值+1，避免并发错误
+                questionMapper.update(c ->
+                        c.set(viewCount).equalToConstant("view_count+1")
+                                .where(id, isEqualTo(questionId))
+                );
             }
         } else {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
