@@ -20,8 +20,12 @@ body {
 }
 
 .media-icon{
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
+}
+
+.media-body{
+    padding-top: 6px;
 }
 
 .text-desc{
@@ -86,4 +90,15 @@ body {
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
+}
+
+.comment-icon{
+    margin-bottom: 10px;
+}
+.comment{
+    margin: 10px 0;
+}
+.comment-btn{
+    float: right;
+    margin-bottom: 10px;
 }
