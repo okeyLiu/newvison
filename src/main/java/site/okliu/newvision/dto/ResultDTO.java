@@ -5,10 +5,11 @@ import site.okliu.newvision.exception.CustomizeErrorCode;
 import site.okliu.newvision.exception.CustomizeException;
 
 @Data
-public class ResultDTO {
+public class ResultDTO<T> {
 
     private Integer code;
     private String message;
+    private T data;
 
     public static ResultDTO errorOf(Integer code, String message){
         ResultDTO resultDTO = new ResultDTO();
@@ -29,6 +30,14 @@ public class ResultDTO {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.code = 200;
         resultDTO.message = "请求成功";
+        return resultDTO;
+    }
+
+    public static <T> ResultDTO okOf(T t){
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.code = 200;
+        resultDTO.message = "请求成功";
+        resultDTO.data = t;
         return resultDTO;
     }
 }

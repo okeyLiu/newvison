@@ -9,7 +9,6 @@ import site.okliu.newvision.exception.CustomizeErrorCode;
 import site.okliu.newvision.exception.CustomizeException;
 import site.okliu.newvision.mapper.QuestionExtMapper;
 import site.okliu.newvision.mapper.QuestionMapper;
-import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.Question;
 import site.okliu.newvision.model.User;
 
@@ -25,7 +24,7 @@ public class QuestionService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -39,9 +38,9 @@ public class QuestionService {
         }
         Integer offset = size * (page - 1);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        List<Question> list = questionExtMapper.list(size,offset);
+        List<Question> list = questionExtMapper.list(size, offset);
         for (Question question : list) {
-            User user = userMapper.selectByPrimaryKey(question.getCreator()).get();
+            User user = userService.findById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -63,11 +62,11 @@ public class QuestionService {
         }
         Integer offset = size * (page - 1);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        List<Question> list = questionExtMapper.listByUserId(userId,size,offset);
-        for (Question qes : list) {
-            User u1 = userMapper.selectByPrimaryKey(qes.getCreator()).get();
+        List<Question> list = questionExtMapper.listByUserId(userId, size, offset);
+        for (Question question : list) {
+            User u1 = userService.findById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(qes, questionDTO);
+            BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(u1);
             questionDTOList.add(questionDTO);
         }
@@ -81,9 +80,9 @@ public class QuestionService {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
-        Question question1 = questionOptional.get();
-        BeanUtils.copyProperties(question1, questionDTO);
-        User user = userMapper.selectByPrimaryKey(question1.getCreator()).get();
+        Question question = questionOptional.get();
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userService.findById(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
@@ -104,14 +103,19 @@ public class QuestionService {
         }
     }
 
-    public void updateViewCount(Long questionId, Long userId) {
+    public void incViewCount(Long questionId) {
         Optional<Question> questionOptional = questionMapper.selectByPrimaryKey(questionId);
         if (questionOptional.isPresent()) {
-            Question question1 = questionOptional.get();
-            // 只有不是问题的创建者(未登录用户、游客)才增加阅读数
-            if (!question1.getCreator().equals(userId)) {
-                questionExtMapper.incViewCount(questionId);
-            }
+            questionExtMapper.incViewCount(questionId);
+        } else {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
+    }
+
+    public void incCommentCount(Long questionId) {
+        Optional<Question> questionOptional = questionMapper.selectByPrimaryKey(questionId);
+        if (questionOptional.isPresent()) {
+            questionExtMapper.incCommentCount(questionId);
         } else {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }

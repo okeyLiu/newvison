@@ -6,6 +6,10 @@ import site.okliu.newvision.mapper.UserExtMapper;
 import site.okliu.newvision.mapper.UserMapper;
 import site.okliu.newvision.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -35,5 +39,17 @@ public class UserService {
             user.setGmtModify(user.getGmtCreate());
             userMapper.insert(user);
         }
+    }
+
+    public List<User> findByIds(ArrayList<Long> ids) {
+        return userExtMapper.listByIds(ids);
+    }
+
+    public User findById(Long id) {
+        Optional<User> optionalUser = userMapper.selectByPrimaryKey(id);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        }
+        return null;
     }
 }

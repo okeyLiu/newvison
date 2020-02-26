@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import site.okliu.newvision.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
-import static org.mybatis.dynamic.sql.SqlBuilder.select;
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import static site.okliu.newvision.mapper.UserDynamicSqlSupport.*;
 
 @Repository
@@ -37,5 +38,9 @@ public class UserExtMapper {
                 .render(RenderingStrategies.MYBATIS3);
         Optional<User> dbUser = userMapper.selectOne(selectStatement);
         return dbUser.get();
+    }
+
+    public List<User> listByIds(ArrayList<Long> ids) {
+        return userMapper.select(c->c.where(id,isIn(ids)));
     }
 }

@@ -19,59 +19,63 @@ body {
     list-style: square;
 }
 
-.media-icon{
-    width: 48px;
-    height: 48px;
+.media-icon {
+    width: 42px;
+    height: 42px;
 }
 
-.media-body{
-    padding-top: 6px;
+.media-body {
+    padding-top: 3px;
 }
 
-.text-desc{
+.text-desc {
     font-size: 12px;
     font-weight: normal;
     color: #999;
 }
 
-.form-login{
+.form-login {
     margin: 30px auto;
     width: 300px;
 }
 
-.form-register{
+.form-register {
     margin: 30px auto;
     width: 300px;
 }
 
-.profile .section{
+.profile .section {
     margin-top: 15px;
 }
 
-.jumbotron{
+.jumbotron {
     margin: 50px;
 }
 
-.link-no-line{
+.link-no-line {
     text-decoration: none;
 }
 
-.margin-right-10{
+.margin-right-10 {
     margin-right: 10px;
 }
 
-#iconsWindow{
+.margin-top-0 {
+    margin-top: 0;
+}
+
+#iconsWindow {
     display: none;
     margin-top: 70px;
     position: relative;
     top: -50px;
 }
 
-.selected-btn{
+.selected-btn {
     width: 60%;
 }
 
-.selected-image{
+.selected-image {
     width: 72px;
     height: 72px;
     float: right;
@@ -81,24 +85,67 @@ body {
     border: 1px solid black;
 }
 
-.icon-item{
+.icon-item {
     margin-top: 25px;
     height: 70px;
 }
 
-.text-limit{
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
+.text-limit {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-.comment-icon{
-    margin-bottom: 10px;
+.comment-icon {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
 }
-.comment{
+
+.comment {
     margin: 10px 0;
 }
-.comment-btn{
+
+.comment-btn {
     float: right;
     margin-bottom: 10px;
+}
+
+#comment-input-box{
+    margin-top: 20px;
+}
+
+.comment-list-box .menu {
+    margin-top: 5px;
+}
+
+.comment-list-box .menu .menu-item {
+    margin-right: 8px;
+    color: #999;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.comment-list-box .menu .in{
+    color: #499ef3;
+}
+
+.comment-list-box .menu .menu-item:hover {
+    color: #499ef3;
+}
+
+.comment-list-box .menu .menu-item span{
+    margin-right: 3px;
+}
+
+.comment-sub-list-box{
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding-top: 10px;
+}
+
+.comment-sub-list-box .btn-comment{
+    margin: 10px 0 10px 10px;
 }
