@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>码农新视界</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/css/newvision.css" />
+    <link rel="stylesheet" href="/css/newvision.css"/>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            var closable = window.localStorage.getItem("closable");
+            if (closable == "true") {
+                window.close();
+                window.localStorage.removeItem("closable");
+            }
+        });
+    </script>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -19,14 +28,18 @@
             <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img-thumbnail media-icon" th:src="${question.user.avatarUrl}" src="https://avatars1.githubusercontent.com/u/8463521?v=4">
+                        <img class="media-object img-thumbnail media-icon" th:src="${question.user.avatarUrl}"
+                             src="https://avatars1.githubusercontent.com/u/8463521?v=4">
                     </a>
                 </div>
                 <div class="media-body">
-                    <a th:href="@{'/question/'+${question.id}}"><h4 class="media-heading" th:text="${question.title}">怎么快速学会SpringBoot开发</h4></a>
+                    <a th:href="@{'/question/'+${question.id}}"><h4 class="media-heading" th:text="${question.title}">
+                        怎么快速学会SpringBoot开发</h4></a>
                     <!-- th:text 对显示的文字长度进行处理，100个字以上的，省略显示... -->
                     <span th:text="${(question.description.length()>100?question.description.substring(0,100)+'...':question.description)}">点击学习 okliu 相关课程视频</span><br/>
-                    <span class="text-desc"><span th:text="${question.commentCount}">2</span>个回复·<span th:text="${question.viewCount}">31</span>次浏览·<span th:text="${T(site.okliu.newvision.utils.TimeUtils).relationTime(question.gmtCreate)}">1小时前</span></span>
+                    <span class="text-desc"><span th:text="${question.commentCount}">2</span>个回复·<span
+                            th:text="${question.viewCount}">31</span>次浏览·<span
+                            th:text="${T(site.okliu.newvision.utils.TimeUtils).relationTime(question.gmtCreate)}">1小时前</span></span>
                 </div>
             </div>
             <nav aria-label="Page navigation">
@@ -37,18 +50,23 @@
                         </a>
                     </li>
                     <li th:if="${pagination.showPrevious}">
-                        <a href="#" th:href="'/?page='+${(pagination.page)-1}+'&size='+${pagination.size}" aria-label="Previous">
+                        <a href="#" th:href="'/?page='+${(pagination.page)-1}+'&size='+${pagination.size}"
+                           aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
-                    <li th:each="page : ${pagination.pages}" th:class="${page == pagination.page?'active':''}"><a href="#" th:href="'/?page='+${page}+'&size='+${pagination.size}" th:text="${page}">1</a></li>
+                    <li th:each="page : ${pagination.pages}" th:class="${page == pagination.page?'active':''}"><a
+                            href="#" th:href="'/?page='+${page}+'&size='+${pagination.size}" th:text="${page}">1</a>
+                    </li>
                     <li th:if="${pagination.showNext}">
-                        <a href="#" th:href="'/?page='+${(pagination.page)+1}+'&size='+${pagination.size}" aria-label="Next">
+                        <a href="#" th:href="'/?page='+${(pagination.page)+1}+'&size='+${pagination.size}"
+                           aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.showLastPage}">
-                        <a href="#" th:href="'/?page='+${pagination.totalPages}+'&size='+${pagination.size}" aria-label="Last">
+                        <a href="#" th:href="'/?page='+${pagination.totalPages}+'&size='+${pagination.size}"
+                           aria-label="Last">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

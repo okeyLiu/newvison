@@ -14,10 +14,19 @@ function ajaxPostSendComment() {
         data: JSON.stringify(formObject),
         dataType: "json",
         success: function (data) {
-            alert(data.message);
-        },
-        error: function (e) {
-            alert("错误！！");
+            if(data.code == 200){
+                $("#comment-form").hide();
+            }else{
+                if (data.code == 2003) {
+                    var isAccepted = confirm(data.message);
+                    if(isAccepted){
+                        window.open("http://localhost:8080/login");
+                        window.localStorage.setItem("closable","true");
+                    }
+                }else{
+                    alert(data.message);
+                }
+            }
         }
     });
 }
