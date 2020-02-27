@@ -6,40 +6,40 @@ import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlTable;
 
 public final class QuestionDynamicSqlSupport {
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.189+08:00", comments="Source Table: QUESTION")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.255+08:00", comments="Source Table: QUESTION")
     public static final Question question = new Question();
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.189+08:00", comments="Source field: QUESTION.ID")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.256+08:00", comments="Source field: QUESTION.ID")
     public static final SqlColumn<Long> id = question.id;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.189+08:00", comments="Source field: QUESTION.TITLE")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.256+08:00", comments="Source field: QUESTION.TITLE")
     public static final SqlColumn<String> title = question.title;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.189+08:00", comments="Source field: QUESTION.GMT_CREATE")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.256+08:00", comments="Source field: QUESTION.GMT_CREATE")
     public static final SqlColumn<Long> gmtCreate = question.gmtCreate;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.189+08:00", comments="Source field: QUESTION.GMT_MODIFY")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.256+08:00", comments="Source field: QUESTION.GMT_MODIFY")
     public static final SqlColumn<Long> gmtModify = question.gmtModify;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.19+08:00", comments="Source field: QUESTION.CREATOR")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.256+08:00", comments="Source field: QUESTION.CREATOR")
     public static final SqlColumn<Long> creator = question.creator;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.19+08:00", comments="Source field: QUESTION.COMMENT_COUNT")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.256+08:00", comments="Source field: QUESTION.COMMENT_COUNT")
     public static final SqlColumn<Integer> commentCount = question.commentCount;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.19+08:00", comments="Source field: QUESTION.VIEW_COUNT")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.257+08:00", comments="Source field: QUESTION.VIEW_COUNT")
     public static final SqlColumn<Integer> viewCount = question.viewCount;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.19+08:00", comments="Source field: QUESTION.LIKE_COUNT")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.257+08:00", comments="Source field: QUESTION.LIKE_COUNT")
     public static final SqlColumn<Integer> likeCount = question.likeCount;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.19+08:00", comments="Source field: QUESTION.TAG")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.257+08:00", comments="Source field: QUESTION.TAG")
     public static final SqlColumn<String> tag = question.tag;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.19+08:00", comments="Source field: QUESTION.DESCRIPTION")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.257+08:00", comments="Source field: QUESTION.DESCRIPTION")
     public static final SqlColumn<String> description = question.description;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-26T01:10:29.189+08:00", comments="Source Table: QUESTION")
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.256+08:00", comments="Source Table: QUESTION")
     public static final class Question extends SqlTable {
         public final SqlColumn<Long> id = column("ID", JDBCType.BIGINT);
 

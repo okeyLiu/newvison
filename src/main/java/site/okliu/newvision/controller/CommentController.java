@@ -25,7 +25,6 @@ public class CommentController {
     @ResponseBody
     @PostMapping("/comment")
     public ResultDTO post(@RequestBody CommnetCreateDTO commnetCreateDTO, HttpSession session) {
-        System.out.println("commnetCreateDTO = " + commnetCreateDTO);
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NOT_LOGIN);
@@ -47,6 +46,7 @@ public class CommentController {
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
         comment.setLikeCount(0L);
+        comment.setCommentCount(0);
         commentService.insert(comment);
         return ResultDTO.okOf();
     }

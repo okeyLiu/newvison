@@ -44,6 +44,7 @@ public class CommentService {
             Optional<Comment> optionalComment = commentMapper.selectByPrimaryKey(comment.getParentId());
             if (optionalComment.isPresent()) {
                 commentMapper.insert(comment);
+                commentExtMapper.incCommentCount(optionalComment.get().getId());
             } else {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }

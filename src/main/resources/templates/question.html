@@ -61,7 +61,7 @@
                                     </span>
                                 <span class="menu-item" onclick="collapseComments(this)"
                                       th:data-id="${comment.id}"> <span
-                                        class="glyphicon glyphicon-comment"></span><span>0</span></span>
+                                        class="glyphicon glyphicon-comment"></span><sapn th:text="${comment.commentCount==0?'':comment.commentCount}">0</sapn></span>
                                 <span class="pull-right"
                                       th:text="${T(site.okliu.newvision.utils.TimeUtils).relationTime(comment.gmtCreate)}"></span>
                             </div>
@@ -71,51 +71,50 @@
                     </div>
                 </div>
             </div>
+            <div id="comment-input-box" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3>发布新回复</h3>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margin-top-0"/>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-icon">
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="media-object img-rounded media-icon"
+                                     th:src="${session.user==null?'http://localhost:8080/images/default.jpg':session.user.avatarUrl}">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 th:text="${session.user==null?'游客':session.user.name}"></h4>
+                        </div>
+                    </div>
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <textarea class="form-control comment" rows="8" name="questionCommentContent"></textarea>
+                    <button type="button" class="btn btn-success comment-btn" onclick="postQuestionComment()">回复
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div id="comment-input-box" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3>发布新回复</h3>
-            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margin-top-0"/>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-icon">
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3>发起人</h3>
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-rounded media-icon"
-                                 th:src="${session.user==null?'http://localhost:8080/images/default.jpg':session.user.avatarUrl}">
+                            <img class="media-object img-rounded media-icon" th:src="${question.user.avatarUrl}">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 th:text="${session.user==null?'游客':session.user.name}"></h4>
+                        <h4 th:text="${question.user.name}"></h4>
                     </div>
                 </div>
-                <input type="hidden" name="questionId" th:value="${question.id}">
-                <textarea class="form-control comment" rows="8" name="questionCommentContent"></textarea>
-                <button type="button" class="btn btn-success comment-btn" onclick="postQuestionComment()">回复
-                </button>
+            </div>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3>相关问题</h3>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3>发起人</h3>
-            <div class="media">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-rounded media-icon" th:src="${question.user.avatarUrl}">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h4 th:text="${question.user.name}"></h4>
-                </div>
-            </div>
-        </div>
-        <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3>相关问题</h3>
-        </div>
-    </div>
 </div>
-</div>
-</div>
+
 </body>
 </html>
