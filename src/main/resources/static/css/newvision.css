@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.question-wechat{
+    width: 100%;
+}
+
 body {
     background-color: #EFEFEF;
 }
@@ -148,4 +152,16 @@ body {
 
 .comment-sub-list-box .btn-comment{
     margin: 10px 0 10px 10px;
+}
+
+.question-tag{
+    margin-right: 5px;
+}
+
+.question-related{
+    line-height: 28px;
+    font-size: 16px;
+    margin-right: 0;
+    padding-left: 0;
+    list-style: none;
 }

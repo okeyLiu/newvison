@@ -1,7 +1,10 @@
 package site.okliu.newvision.model;
 
+import lombok.ToString;
+
 import javax.annotation.Generated;
 
+@ToString
 public class Question {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2020-02-27T15:48:49.253+08:00", comments="Source field: QUESTION.ID")
     private Long id;

@@ -1,9 +1,12 @@
 package site.okliu.newvision.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import site.okliu.newvision.dto.QuestionDTO;
 import site.okliu.newvision.model.Question;
 
 import java.util.List;
@@ -103,6 +106,33 @@ public class QuestionExtMapper {
                 .offset(offset)
                 .build().render(RenderingStrategies.MYBATIS3);
         return questionMapper.selectMany(pageSelect);
+    }
+
+    /**
+     * 查询相关标签的问题
+     *
+     * @param questionDTO
+     * @return
+     */
+    public List<Question> selectRelated(QuestionDTO questionDTO) {
+        return questionXMLMapper.selectRelated(questionDTO);
+    }
+
+    @Autowired
+    private QuestionXMLMapper questionXMLMapper;
+
+    /**
+     * 该接口的存在，只是为了解决MyBatis3动态SQL暂不支持的（或未找到相关使用资料）一些用法，采用原生SQL的写法
+     */
+    @Mapper
+    private interface QuestionXMLMapper {
+        /**
+         *
+         * @param questionDTO
+         * @return
+         */
+        @Select("select * from question where id != #{id} and tag regexp replace(#{tag}, ',', '|')")
+        List<Question> selectRelated(QuestionDTO questionDTO);
     }
 
 }
