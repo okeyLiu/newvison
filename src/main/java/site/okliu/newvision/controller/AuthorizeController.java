@@ -67,7 +67,14 @@ public class AuthorizeController {
      ***********************/
     @GetMapping("/tempLogin")
     public String tempLogin(HttpServletResponse response){
+        String token = "00000000-0000-0000-0000-000000000000";
         response.addCookie(new Cookie("token","00000000-0000-0000-0000-000000000000"));
+        User user = new User();
+        user.setToken(token);
+        user.setName("测试用户");
+        user.setAccountId("9999999");
+        user.setAvatarUrl("http://localhost:8080/images/default.jpg");
+        userService.createOrUpdate(user);
         return "redirect:/";
     }
 

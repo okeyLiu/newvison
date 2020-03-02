@@ -27,7 +27,10 @@ public class UserExtMapper {
                         .build()
                         .render(RenderingStrategies.MYBATIS3);
         Optional<User> user = userMapper.selectOne(selectStatement);
-        return user.get();
+        if(user.isPresent()){
+            return user.get();
+        }
+        return null;
     }
 
     public User findByAccountId(String userAccountId) {
@@ -37,7 +40,10 @@ public class UserExtMapper {
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
         Optional<User> dbUser = userMapper.selectOne(selectStatement);
-        return dbUser.get();
+        if(dbUser.isPresent()){
+            return dbUser.get();
+        }
+        return null;
     }
 
     public List<User> listByIds(ArrayList<Long> ids) {

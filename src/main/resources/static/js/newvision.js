@@ -154,3 +154,39 @@ function timeago(dateTimeStamp){   //dateTimeStamp是一个时间毫秒，注意
     }
     return result;
 }
+
+function cLog(e){
+    console.log(e);
+}
+
+function showTags() {
+    $(".tags").toggle();
+}
+
+/**
+ * 选择标签
+ * @param e
+ */
+function selectTag(e){
+    var add = e.getAttribute("data-val");
+    var old = $("#tag").val();
+    var index = old.indexOf(add);
+    if(index == -1){
+        if(old){
+            $("#tag").val(old + "," + add);
+        }else{
+            $("#tag").val(add);
+        }
+        $(e).removeClass("label-info");
+        $(e).addClass("label-success");
+    }else{
+        // "php,java,python"
+        var old = old.substring(0,index-1)+old.substring(index+add.length);
+        if(old.indexOf(',') == 0){
+            old = old.substring(1);
+        }
+        $("#tag").val(old);
+        $(e).removeClass("label-success");
+        $(e).addClass("label-info");
+    }
+}
