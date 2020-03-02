@@ -21,8 +21,9 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("")
-    public String publish() {
-        return "/login";
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
+        return "publish";
     }
 
     @GetMapping("/{id}")

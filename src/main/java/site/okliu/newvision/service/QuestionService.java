@@ -28,8 +28,8 @@ public class QuestionService {
     @Autowired
     private UserService userService;
 
-    public PaginationDTO list(Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO();
         paginationDTO.setPaginationDTO(questionExtMapper.countQuestions(), page, size);
         // 优化参数
         if (page < 1) {
@@ -42,12 +42,12 @@ public class QuestionService {
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         List<Question> list = questionExtMapper.list(size, offset);
         convertQuestions2QuestionDTOs(list, questionDTOList);
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 
-    public PaginationDTO list(Long userId, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+    public PaginationDTO<QuestionDTO> list(Long userId, Integer page, Integer size) {
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO();
         paginationDTO.setPaginationDTO(questionExtMapper.countQuestionsByUserId(userId), page, size);
         // 优化参数
         if (page < 1) {
@@ -60,7 +60,7 @@ public class QuestionService {
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         List<Question> list = questionExtMapper.listByUserId(userId, size, offset);
         convertQuestions2QuestionDTOs(list, questionDTOList);
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 

@@ -7,11 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import site.okliu.newvision.dto.CommentDTO;
 import site.okliu.newvision.dto.QuestionDTO;
 import site.okliu.newvision.enums.CommentTypeEnum;
+import site.okliu.newvision.enums.NotificationStatusEnum;
+import site.okliu.newvision.enums.NotificationTypeEnum;
 import site.okliu.newvision.exception.CustomizeErrorCode;
 import site.okliu.newvision.exception.CustomizeException;
 import site.okliu.newvision.mapper.CommentExtMapper;
 import site.okliu.newvision.mapper.CommentMapper;
+import site.okliu.newvision.mapper.NotificationMapper;
 import site.okliu.newvision.model.Comment;
+import site.okliu.newvision.model.Notification;
 import site.okliu.newvision.model.User;
 
 import java.util.*;
@@ -28,9 +32,11 @@ public class CommentService {
     private UserService userService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     @Transactional
-    public void insert(Comment comment) {
+    public void insert(Comment comment, User commentator) {
         if (comment.getType() == CommentTypeEnum.QUESTION.getType()) {
             // 回复问题
             QuestionDTO questionDTO = questionService.findById(comment.getParentId());
@@ -39,21 +45,53 @@ public class CommentService {
             }
             commentMapper.insert(comment);
             questionService.incCommentCount(comment.getParentId());
+            // 通知问题
+            createNotify(comment, questionDTO.getCreator(), commentator.getName(), questionDTO.getTitle(), NotificationTypeEnum.REPLY_QUESTION, comment.getParentId());
         } else {
             // 回复评论
             Optional<Comment> optionalComment = commentMapper.selectByPrimaryKey(comment.getParentId());
             if (optionalComment.isPresent()) {
+                Comment dbComment = optionalComment.get();
                 commentMapper.insert(comment);
-                commentExtMapper.incCommentCount(optionalComment.get().getId());
+                commentExtMapper.incCommentCount(dbComment.getId());
+                QuestionDTO questionDTO = questionService.findById(dbComment.getParentId());
+                if (questionDTO == null) {
+                    throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                }
+                // 通知评论
+                createNotify(comment, dbComment.getCommentator(), commentator.getName(), questionDTO.getTitle(), NotificationTypeEnum.REPLY_COMMENT, questionDTO.getId());
             } else {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
         }
     }
 
+    /**
+     * 创建通知
+     *
+     * @param comment
+     * @param receiver
+     * @param notifierName
+     * @param questionTitle
+     * @param notificationType
+     * @param outerId
+     */
+    private void createNotify(Comment comment, Long receiver, String notifierName, String questionTitle, NotificationTypeEnum notificationType, Long outerId) {
+        Notification notification = new Notification();
+        notification.setReceiver(receiver);
+        notification.setNotifier(comment.getCommentator());
+        notification.setNotifierName(notifierName);
+        notification.setOuterId(outerId);
+        notification.setOuterTitle(questionTitle);
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(notificationType.getType());
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notificationMapper.insert(notification);
+    }
+
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
         // 获取所有该type类型的评论
-        List<Comment> comments = commentExtMapper.listByTargetId(id,type);
+        List<Comment> comments = commentExtMapper.listByTargetId(id, type);
         if (comments.isEmpty()) {
             return Collections.emptyList();
         }

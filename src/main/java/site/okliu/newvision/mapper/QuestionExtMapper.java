@@ -127,7 +127,7 @@ public class QuestionExtMapper {
     @Mapper
     private interface QuestionXMLMapper {
         /**
-         *
+         * 查询包含该问题标签的所有问题"java,php" -> "java|php" 进行正则匹配；结果不包含当前问题本身
          * @param questionDTO
          * @return
          */

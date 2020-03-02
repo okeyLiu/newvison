@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.PaginationDTO;
 import site.okliu.newvision.model.User;
+import site.okliu.newvision.service.NotificationService;
 import site.okliu.newvision.service.QuestionService;
 
 import javax.servlet.http.HttpSession;
@@ -19,6 +20,8 @@ public class ProfileController {
 
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/{action}")
     public String profile(
@@ -31,18 +34,23 @@ public class ProfileController {
         if (user == null) {
             return "redirect:/";
         }
+        PaginationDTO pagination = null;
         switch (action) {
             case "questions":
                 model.addAttribute("section", "questions");
                 model.addAttribute("sectionName", "我的提问");
+                pagination = questionService.list(user.getId(), page, size);
+                model.addAttribute("pagination",pagination);
                 break;
             case "replies":
                 model.addAttribute("section", "replies");
                 model.addAttribute("sectionName", "最新回复");
+                pagination = notificationService.list(user.getId(), page, size);
+                model.addAttribute("pagination",pagination);
                 break;
         }
-        PaginationDTO pagination = questionService.list(user.getId(), page, size);
-        model.addAttribute("pagination",pagination);
+        Long unreadCount = notificationService.unreadCount(user.getId());
+        model.addAttribute("unreadCount",unreadCount);
         return "profile";
     }
 
