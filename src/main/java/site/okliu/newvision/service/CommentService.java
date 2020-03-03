@@ -77,6 +77,10 @@ public class CommentService {
      * @param outerId
      */
     private void createNotify(Comment comment, Long receiver, String notifierName, String questionTitle, NotificationTypeEnum notificationType, Long outerId) {
+        if(receiver == comment.getCommentator()){
+            // 不给自己发通知
+            return;
+        }
         Notification notification = new Notification();
         notification.setReceiver(receiver);
         notification.setNotifier(comment.getCommentator());
