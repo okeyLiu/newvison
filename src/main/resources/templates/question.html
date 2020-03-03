@@ -5,9 +5,13 @@
     <title th:text="${question.title}"></title>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/editormd.preview.min.css" />
     <link rel="stylesheet" href="/css/newvision.css"/>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/editormd.min.js"></script>
+    <script src="/js/lib/marked.min.js"></script>
+    <script src="/js/lib/prettify.min.js"></script>
     <script src="/js/newvision.js"></script>
 </head>
 <body>
@@ -25,7 +29,19 @@
                     阅读数：<span th:text="${question.viewCount}"></span>
                 </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
-                <div th:text="${question.description}"></div>
+                <div id="description">
+                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+                </div>
+                <script type="text/javascript">
+                    $(function() {
+                        var description = editormd.markdownToHTML("description", {
+                            // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+                            // htmlDecode : true,  // Enable / disable HTML tag encode.
+                            // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+                        });
+                    });
+                </script>
+
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <a th:href="@{/question/tag(tag=${tag})}" th:each="tag : ${question.tag.split(',')}" class="label label-info question-tag">
@@ -122,7 +138,6 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h3>相关问题</h3>
-                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
                 <ul class="question-related">
                    <li th:each="que:${relatedQuestions}">
                        <a th:href="${'/question/'+que.id}" th:text="${que.title}"></a>

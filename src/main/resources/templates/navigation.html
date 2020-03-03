@@ -25,7 +25,7 @@
                     <li th:if="${session.user != null}">
                         <a href="/publish">发布</a>
                     </li>
-                    <li th:if="${session.user != null}"><a href="/profile/replies">通知<span class="badge" th:text="${unreadCount==0?'':unreadCount}">42</span></a></li>
+                    <li th:if="${session.user != null}"><a href="/profile/replies">通知 <span class="badge" th:text="${session.unreadCount==0?'':session.unreadCount}"></span></a></li>
                     <li th:if="${session.user == null}">
                         <a href="/login" th:if="${#request.getRequestURI()!='/login'}">前往登录页面</a>
                     </li>

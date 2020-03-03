@@ -49,8 +49,6 @@ public class ProfileController {
                 model.addAttribute("pagination",pagination);
                 break;
         }
-        Long unreadCount = notificationService.unreadCount(user.getId());
-        model.addAttribute("unreadCount",unreadCount);
         return "profile";
     }
 
