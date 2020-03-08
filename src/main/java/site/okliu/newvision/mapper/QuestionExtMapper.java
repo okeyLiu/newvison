@@ -1,11 +1,13 @@
 package site.okliu.newvision.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.QuestionDTO;
 import site.okliu.newvision.model.Question;
 
@@ -44,35 +46,6 @@ public class QuestionExtMapper {
                 c.set(commentCount).equalToConstant("comment_count+1")
                         .where(id, isEqualTo(questionId))
         );
-    }
-
-    /**
-     * 返回所有问题的条数
-     *
-     * @return
-     */
-    public Long countQuestions() {
-        SelectStatementProvider countSelect = select(count())
-                .from(question)
-                .build().render(RenderingStrategies.MYBATIS3);
-        return questionMapper.count(countSelect);
-    }
-
-    /**
-     * 返回所有问题的分页数据
-     *
-     * @param size
-     * @param offset
-     * @return
-     */
-    public List<Question> list(Integer size, Integer offset) {
-        SelectStatementProvider pageSelect = select(question.allColumns())
-                .from(question)
-                .orderBy(gmtCreate.descending())// descending() 降序
-                .limit(size)
-                .offset(offset)
-                .build().render(RenderingStrategies.MYBATIS3);
-        return questionMapper.selectMany(pageSelect);
     }
 
     /**
@@ -121,16 +94,25 @@ public class QuestionExtMapper {
     @Autowired
     private QuestionXMLMapper questionXMLMapper;
 
+    public Long countBySearch(String search) {
+        return questionXMLMapper.countSearch(search);
+    }
+
+    public List<Question> listBySearch(String search, Integer size, Integer offset) {
+        return questionXMLMapper.listBySearch(search, size, offset);
+    }
+
     /**
      * 该接口的存在，只是为了解决MyBatis3动态SQL暂不支持的（或未找到相关使用资料）一些用法，采用原生SQL的写法
      */
     @Mapper
     private interface QuestionXMLMapper {
-        /**
-         * 查询包含该问题标签的所有问题"java,php" -> "java|php" 进行正则匹配；结果不包含当前问题本身
-         * @param questionDTO
-         * @return
-         */
+        @Select("select count(*) from question where title regexp #{search}")
+        Long countSearch(@Param("search") String search);
+
+        @Select("select * from question where title regexp #{search} order by gmt_create desc limit #{offset},#{size}")
+        List<Question> listBySearch(@Param("search") String search, @Param("size") Integer size, @Param("offset") Integer offset);
+
         @Select("select * from question where id != #{id} and tag regexp replace(#{tag}, ',', '|')")
         List<Question> selectRelated(QuestionDTO questionDTO);
     }

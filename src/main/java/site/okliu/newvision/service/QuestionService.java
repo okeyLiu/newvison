@@ -28,9 +28,13 @@ public class QuestionService {
     @Autowired
     private UserService userService;
 
-    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
+    public PaginationDTO<QuestionDTO> list(String search, Integer page, Integer size) {
+        if (StringUtils.isNotBlank(search)){
+            String[] strings = StringUtils.split(search, " {1,}");
+            search = StringUtils.join(strings, "|");
+        }
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO();
-        paginationDTO.setPaginationDTO(questionExtMapper.countQuestions(), page, size);
+        paginationDTO.setPaginationDTO(questionExtMapper.countBySearch(search), page, size);
         // 优化参数
         if (page < 1) {
             page = 1;
@@ -40,7 +44,7 @@ public class QuestionService {
         }
         Integer offset = size * (page - 1);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        List<Question> list = questionExtMapper.list(size, offset);
+        List<Question> list = questionExtMapper.listBySearch(search,size, offset);
         convertQuestions2QuestionDTOs(list, questionDTOList);
         paginationDTO.setData(questionDTOList);
         return paginationDTO;
