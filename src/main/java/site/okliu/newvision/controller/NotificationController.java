@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import site.okliu.newvision.dto.NotificationDTO;
 import site.okliu.newvision.enums.NotificationTypeEnum;
-import site.okliu.newvision.model.Notification;
 import site.okliu.newvision.model.User;
 import site.okliu.newvision.service.NotificationService;
 
@@ -17,8 +16,12 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/notification")
 public class NotificationController {
 
-    @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
     @GetMapping("/{id}")
     public String notification(@PathVariable("id") Long id, HttpSession session) {

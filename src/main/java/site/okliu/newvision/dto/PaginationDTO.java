@@ -27,10 +27,10 @@ public class PaginationDTO<T> {
             totalPages = Math.toIntExact(count / size + 1);
         }
         // 优化参数
-        if(page<1){
+        if (page < 1) {
             page = 1;
         }
-        if(page > totalPages){
+        if (page > totalPages) {
             page = totalPages;
         }
         // 显示的页码

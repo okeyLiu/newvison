@@ -19,8 +19,12 @@ import java.util.List;
 @Controller
 public class CommentController {
 
-    @Autowired
     private CommentService commentService;
+
+    @Autowired
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @ResponseBody
     @PostMapping("/comment")

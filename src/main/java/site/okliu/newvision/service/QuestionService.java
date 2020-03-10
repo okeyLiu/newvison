@@ -21,15 +21,19 @@ import java.util.Optional;
 @Service
 public class QuestionService {
 
-    @Autowired
     private QuestionMapper questionMapper;
-    @Autowired
     private QuestionExtMapper questionExtMapper;
-    @Autowired
     private UserService userService;
 
+    @Autowired
+    public QuestionService(QuestionMapper questionMapper, QuestionExtMapper questionExtMapper, UserService userService) {
+        this.questionMapper = questionMapper;
+        this.questionExtMapper = questionExtMapper;
+        this.userService = userService;
+    }
+
     public PaginationDTO<QuestionDTO> list(String search, Integer page, Integer size) {
-        if (StringUtils.isNotBlank(search)){
+        if (StringUtils.isNotBlank(search)) {
             String[] strings = StringUtils.split(search, " {1,}");
             search = StringUtils.join(strings, "|");
         }
@@ -44,7 +48,7 @@ public class QuestionService {
         }
         Integer offset = size * (page - 1);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        List<Question> list = questionExtMapper.listBySearch(search,size, offset);
+        List<Question> list = questionExtMapper.listBySearch(search, size, offset);
         convertQuestions2QuestionDTOs(list, questionDTOList);
         paginationDTO.setData(questionDTOList);
         return paginationDTO;

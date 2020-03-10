@@ -1,5 +1,6 @@
 package site.okliu.newvision.mapper;
 
+import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,37 +17,36 @@ import static site.okliu.newvision.mapper.UserDynamicSqlSupport.*;
 @Repository
 public class UserExtMapper {
 
-    @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    public UserExtMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     public User findByToken(String tokenStr) {
+        return getUser(token, tokenStr);
+    }
+
+    public User getUser(SqlColumn<String> columnBy, String columnValue) {
         SelectStatementProvider selectStatement =
                 select(user.allColumns())
                         .from(user)
-                        .where(token, isEqualTo(tokenStr))
+                        .where(columnBy, isEqualTo(columnValue))
                         .build()
                         .render(RenderingStrategies.MYBATIS3);
         Optional<User> user = userMapper.selectOne(selectStatement);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
         }
         return null;
     }
 
     public User findByAccountId(String userAccountId) {
-        SelectStatementProvider selectStatement = select(user.allColumns())
-                .from(user)
-                .where(accountId, isEqualTo(userAccountId))
-                .build()
-                .render(RenderingStrategies.MYBATIS3);
-        Optional<User> dbUser = userMapper.selectOne(selectStatement);
-        if(dbUser.isPresent()){
-            return dbUser.get();
-        }
-        return null;
+        return getUser(accountId, userAccountId);
     }
 
     public List<User> listByIds(ArrayList<Long> ids) {
-        return userMapper.select(c->c.where(id,isIn(ids)));
+        return userMapper.select(c -> c.where(id, isIn(ids)));
     }
 }

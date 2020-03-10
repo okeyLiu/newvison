@@ -22,10 +22,14 @@ import java.util.Optional;
 @Service
 public class NotificationService {
 
-    @Autowired
     private NotificationMapper notificationMapper;
-    @Autowired
     private NotificationExtMapper notificationExtMapper;
+
+    @Autowired
+    public NotificationService(NotificationMapper notificationMapper, NotificationExtMapper notificationExtMapper) {
+        this.notificationMapper = notificationMapper;
+        this.notificationExtMapper = notificationExtMapper;
+    }
 
     public PaginationDTO<NotificationDTO> list(Long userId, Integer page, Integer size) {
         PaginationDTO<NotificationDTO> paginationDTO = new PaginationDTO();
@@ -39,7 +43,7 @@ public class NotificationService {
         }
         Integer offset = size * (page - 1);
         List<Notification> notifications = notificationExtMapper.list(userId, size, offset);
-        if(notifications.isEmpty()){
+        if (notifications.isEmpty()) {
             return paginationDTO;
         }
         List<NotificationDTO> notificationDTOS = new ArrayList<>();
@@ -72,5 +76,9 @@ public class NotificationService {
         BeanUtils.copyProperties(notification, notificationDTO);
         notificationDTO.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
         return notificationDTO;
+    }
+
+    public void insert(Notification notification) {
+        notificationMapper.insert(notification);
     }
 }

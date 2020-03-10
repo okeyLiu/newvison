@@ -5,16 +5,20 @@ import org.springframework.stereotype.Repository;
 import site.okliu.newvision.enums.CommentTypeEnum;
 import site.okliu.newvision.model.Comment;
 
-import static org.mybatis.dynamic.sql.SqlBuilder.*;
-import static site.okliu.newvision.mapper.CommentDynamicSqlSupport.*;
-
 import java.util.List;
+
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+import static site.okliu.newvision.mapper.CommentDynamicSqlSupport.*;
 
 @Repository
 public class CommentExtMapper {
 
-    @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    public CommentExtMapper(CommentMapper commentMapper) {
+        this.commentMapper = commentMapper;
+    }
 
     /**
      * 根据类型返回评论列表

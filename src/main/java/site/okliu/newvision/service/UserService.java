@@ -13,12 +13,14 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
     private UserMapper userMapper;
-
-    @Autowired
     private UserExtMapper userExtMapper;
 
+    @Autowired
+    public UserService(UserMapper userMapper, UserExtMapper userExtMapper) {
+        this.userMapper = userMapper;
+        this.userExtMapper = userExtMapper;
+    }
 
     public User findByToken(String token) {
         return userExtMapper.findByToken(token);

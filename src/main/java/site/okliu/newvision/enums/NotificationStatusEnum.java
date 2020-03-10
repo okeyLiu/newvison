@@ -1,8 +1,7 @@
 package site.okliu.newvision.enums;
 
 public enum NotificationStatusEnum {
-    UNREAD(0),READ(1)
-    ;
+    UNREAD(0), READ(1);
     private int status;
 
     NotificationStatusEnum(int status) {
@@ -12,6 +11,5 @@ public enum NotificationStatusEnum {
     public int getStatus() {
         return status;
     }
-
 
 }

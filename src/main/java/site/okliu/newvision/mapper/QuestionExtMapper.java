@@ -7,7 +7,6 @@ import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 import site.okliu.newvision.dto.QuestionDTO;
 import site.okliu.newvision.model.Question;
 
@@ -19,8 +18,15 @@ import static site.okliu.newvision.mapper.QuestionDynamicSqlSupport.*;
 @Repository
 public class QuestionExtMapper {
 
-    @Autowired
     private QuestionMapper questionMapper;
+    private QuestionXMLMapper questionXMLMapper;
+
+
+    @Autowired
+    public QuestionExtMapper(QuestionMapper questionMapper, QuestionXMLMapper questionXMLMapper) {
+        this.questionMapper = questionMapper;
+        this.questionXMLMapper = questionXMLMapper;
+    }
 
     /**
      * 阅读数+1
@@ -90,9 +96,6 @@ public class QuestionExtMapper {
     public List<Question> selectRelated(QuestionDTO questionDTO) {
         return questionXMLMapper.selectRelated(questionDTO);
     }
-
-    @Autowired
-    private QuestionXMLMapper questionXMLMapper;
 
     public Long countBySearch(String search) {
         return questionXMLMapper.countSearch(search);

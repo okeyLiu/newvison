@@ -17,14 +17,13 @@ import site.okliu.newvision.utils.FileUtils;
 public class FileController {
 
     private final ResourceLoader resourceLoader;
+    @Value("${web.upload-path}")
+    private String path;
 
     @Autowired
     public FileController(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
-
-    @Value("${web.upload-path}")
-    private String path;
 
     @ResponseBody
     @RequestMapping("/file/upload")
@@ -46,7 +45,7 @@ public class FileController {
     }
 
     @RequestMapping("/show/{fileName}")
-    public ResponseEntity show(@PathVariable String fileName){
+    public ResponseEntity show(@PathVariable String fileName) {
         try {
             // 由于是读取本机的文件，file是一定要加上的， path是在application配置文件中的路径
             return ResponseEntity.ok(resourceLoader.getResource("file:" + path + fileName));

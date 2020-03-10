@@ -22,9 +22,6 @@ import java.util.UUID;
 @Controller
 public class AuthorizeController {
 
-    @Autowired
-    private GithubProvider githubProvider;
-
     @Value("${github.client.id}")
     private String clientId;
     @Value("${github.client.secret}")
@@ -32,13 +29,19 @@ public class AuthorizeController {
     @Value("${github.client.redirect_uri}")
     private String redirectUri;
 
-    @Autowired
+    private GithubProvider githubProvider;
     private UserService userService;
+
+    @Autowired
+    public AuthorizeController(GithubProvider githubProvider, UserService userService) {
+        this.githubProvider = githubProvider;
+        this.userService = userService;
+    }
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
-                           @RequestParam(name="state") String state,
-                           HttpServletResponse response){
+                           @RequestParam(name = "state") String state,
+                           HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -47,7 +50,7 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if(githubUser != null){
+        if (githubUser != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
@@ -55,20 +58,18 @@ public class AuthorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatar_url());
             userService.createOrUpdate(user);
-            response.addCookie(new Cookie("token",token));
-            return "redirect:/";
-        }else{
-            //登录失败，重新登录
-            return "redirect:/";
+            response.addCookie(new Cookie("token", token));
         }
+        return "redirect:/";
     }
+
     /***********************
      * 临时测试使用，无网环境  *
      ***********************/
     @GetMapping("/tempLogin")
-    public String tempLogin(HttpServletResponse response){
+    public String tempLogin(HttpServletResponse response) {
         String token = "00000000-0000-0000-0000-000000000000";
-        response.addCookie(new Cookie("token","00000000-0000-0000-0000-000000000000"));
+        response.addCookie(new Cookie("token", "00000000-0000-0000-0000-000000000000"));
         User user = new User();
         user.setToken(token);
         user.setName("测试用户");
@@ -79,24 +80,24 @@ public class AuthorizeController {
     }
 
     @GetMapping("/login")
-    public String toLoginPage(){
+    public String toLoginPage() {
         return "login";
     }
 
     @GetMapping("/register")
-    public String toRegisterPage(Model model){
+    public String toRegisterPage(Model model) {
         List<String> icons = new ArrayList<>();
-        for (int i = 0; i <= 25 ; i++) {
-            icons.add("http://localhost:8080/images/icon-"+i+".jpg");
+        for (int i = 0; i <= 25; i++) {
+            icons.add("http://localhost:8080/images/icon-" + i + ".jpg");
         }
-        model.addAttribute("icons",icons);
+        model.addAttribute("icons", icons);
         return "register";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session,HttpServletResponse response){
+    public String logout(HttpSession session, HttpServletResponse response) {
         session.removeAttribute("user");
-        Cookie cookie = new Cookie("token",null);
+        Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return "redirect:/";

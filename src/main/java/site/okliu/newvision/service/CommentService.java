@@ -13,7 +13,6 @@ import site.okliu.newvision.exception.CustomizeErrorCode;
 import site.okliu.newvision.exception.CustomizeException;
 import site.okliu.newvision.mapper.CommentExtMapper;
 import site.okliu.newvision.mapper.CommentMapper;
-import site.okliu.newvision.mapper.NotificationMapper;
 import site.okliu.newvision.model.Comment;
 import site.okliu.newvision.model.Notification;
 import site.okliu.newvision.model.User;
@@ -24,16 +23,20 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
 
-    @Autowired
     private CommentMapper commentMapper;
-    @Autowired
     private CommentExtMapper commentExtMapper;
-    @Autowired
     private UserService userService;
-    @Autowired
     private QuestionService questionService;
+    private NotificationService notificationService;
+
     @Autowired
-    private NotificationMapper notificationMapper;
+    public CommentService(CommentMapper commentMapper, CommentExtMapper commentExtMapper, UserService userService, QuestionService questionService, NotificationService notificationService) {
+        this.commentMapper = commentMapper;
+        this.commentExtMapper = commentExtMapper;
+        this.userService = userService;
+        this.questionService = questionService;
+        this.notificationService = notificationService;
+    }
 
     @Transactional
     public void insert(Comment comment, User commentator) {
@@ -77,7 +80,7 @@ public class CommentService {
      * @param outerId
      */
     private void createNotify(Comment comment, Long receiver, String notifierName, String questionTitle, NotificationTypeEnum notificationType, Long outerId) {
-        if(receiver == comment.getCommentator()){
+        if (receiver == comment.getCommentator()) {
             // 不给自己发通知
             return;
         }
@@ -90,7 +93,7 @@ public class CommentService {
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(notificationType.getType());
         notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
-        notificationMapper.insert(notification);
+        notificationService.insert(notification);
     }
 
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {

@@ -17,10 +17,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/question")
 public class QuestionController {
-    @Autowired
     private QuestionService questionService;
-    @Autowired
     private CommentService commentService;
+
+    @Autowired
+    public QuestionController(QuestionService questionService, CommentService commentService) {
+        this.questionService = questionService;
+        this.commentService = commentService;
+    }
 
     @GetMapping("/{id}")
     public String question(@PathVariable("id") Long id, Model model) {

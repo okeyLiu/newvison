@@ -18,10 +18,14 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/profile")
 public class ProfileController {
 
-    @Autowired
     private QuestionService questionService;
-    @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    public ProfileController(QuestionService questionService, NotificationService notificationService) {
+        this.questionService = questionService;
+        this.notificationService = notificationService;
+    }
 
     @GetMapping("/{action}")
     public String profile(
@@ -40,13 +44,13 @@ public class ProfileController {
                 model.addAttribute("section", "questions");
                 model.addAttribute("sectionName", "我的提问");
                 pagination = questionService.list(user.getId(), page, size);
-                model.addAttribute("pagination",pagination);
+                model.addAttribute("pagination", pagination);
                 break;
             case "replies":
                 model.addAttribute("section", "replies");
                 model.addAttribute("sectionName", "最新回复");
                 pagination = notificationService.list(user.getId(), page, size);
-                model.addAttribute("pagination",pagination);
+                model.addAttribute("pagination", pagination);
                 break;
         }
         return "profile";

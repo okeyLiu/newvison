@@ -12,11 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SessionInterceptor implements HandlerInterceptor {
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    public SessionInterceptor(UserService userService, NotificationService notificationService) {
+        this.userService = userService;
+        this.notificationService = notificationService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

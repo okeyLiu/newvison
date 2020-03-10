@@ -17,8 +17,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/publish")
 public class PublishController {
 
-    @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    public PublishController(QuestionService questionService) {
+        assert questionService != null;
+        this.questionService = questionService;
+    }
 
     @GetMapping("")
     public String publish(Model model) {
