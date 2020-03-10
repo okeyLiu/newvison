@@ -97,12 +97,12 @@ public class QuestionExtMapper {
         return questionXMLMapper.selectRelated(questionDTO);
     }
 
-    public Long countBySearch(String search) {
-        return questionXMLMapper.countSearch(search);
+    public Long countBySearchTag(String search, String tag) {
+        return questionXMLMapper.countSearchTag(search, tag);
     }
 
-    public List<Question> listBySearch(String search, Integer size, Integer offset) {
-        return questionXMLMapper.listBySearch(search, size, offset);
+    public List<Question> listBySearchTag(String search, String tag, Integer size, Integer offset) {
+        return questionXMLMapper.listBySearchTag(search, tag, size, offset);
     }
 
     /**
@@ -110,13 +110,13 @@ public class QuestionExtMapper {
      */
     @Mapper
     private interface QuestionXMLMapper {
-        @Select("select count(*) from question where title regexp #{search}")
-        Long countSearch(@Param("search") String search);
+        @Select("select count(*) from question where title regexp #{search} and tag regexp #{tag}")
+        Long countSearchTag(@Param("search") String search, @Param("tag") String tag);
 
-        @Select("select * from question where title regexp #{search} order by gmt_create desc limit #{offset},#{size}")
-        List<Question> listBySearch(@Param("search") String search, @Param("size") Integer size, @Param("offset") Integer offset);
+        @Select("select * from question where title regexp #{search} and tag regexp #{tag} order by gmt_create desc,comment_count desc,view_count desc limit #{offset},#{size}")
+        List<Question> listBySearchTag(@Param("search") String search, @Param("tag") String tag, @Param("size") Integer size, @Param("offset") Integer offset);
 
-        @Select("select * from question where id != #{id} and tag regexp replace(#{tag}, ',', '|')")
+        @Select("select * from question where id != #{id} and tag regexp replace(#{tag}, ',', '|') order by comment_count desc,view_count desc,gmt_create desc limit 0, 10")
         List<Question> selectRelated(QuestionDTO questionDTO);
     }
 

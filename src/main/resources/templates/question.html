@@ -140,7 +140,11 @@
                 <h3>相关问题</h3>
                 <ul class="question-related">
                    <li th:each="que:${relatedQuestions}">
-                       <a th:href="${'/question/'+que.id}" th:text="${que.title}"></a>
+                       <a th:href="${'/question/'+que.id}" >
+                           <span th:text="${que.title}"></span>&nbsp;&nbsp;
+                           <span th:if="${que.viewCount != 0}">阅读：<span th:text="${que.viewCount}"></span></span>&nbsp;&nbsp;
+                           <span th:if="${que.commentCount != 0}">回复：<span th:text="${que.commentCount}"></span></span>&nbsp;
+                       </a>
                    </li>
                 </ul>
             </div>

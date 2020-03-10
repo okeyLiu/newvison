@@ -32,13 +32,13 @@ public class QuestionService {
         this.userService = userService;
     }
 
-    public PaginationDTO<QuestionDTO> list(String search, Integer page, Integer size) {
+    public PaginationDTO<QuestionDTO> list(String search, String tag, Integer page, Integer size) {
         if (StringUtils.isNotBlank(search)) {
             String[] strings = StringUtils.split(search, " {1,}");
             search = StringUtils.join(strings, "|");
         }
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO();
-        paginationDTO.setPaginationDTO(questionExtMapper.countBySearch(search), page, size);
+        paginationDTO.setPaginationDTO(questionExtMapper.countBySearchTag(search, tag), page, size);
         // 优化参数
         if (page < 1) {
             page = 1;
@@ -48,7 +48,7 @@ public class QuestionService {
         }
         Integer offset = size * (page - 1);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        List<Question> list = questionExtMapper.listBySearch(search, size, offset);
+        List<Question> list = questionExtMapper.listBySearchTag(search, tag, size, offset);
         convertQuestions2QuestionDTOs(list, questionDTOList);
         paginationDTO.setData(questionDTOList);
         return paginationDTO;
@@ -119,6 +119,11 @@ public class QuestionService {
         }
     }
 
+    /**
+     * 最多返回10个相关问题
+     * @param questionDTO
+     * @return
+     */
     public List<QuestionDTO> findRelated(QuestionDTO questionDTO) {
         if (StringUtils.isBlank(questionDTO.getTag())) {
             return Collections.EMPTY_LIST;
@@ -137,5 +142,9 @@ public class QuestionService {
             qesDTO.setUser(user);
             questionDTOList.add(qesDTO);
         }
+    }
+
+    public List<Question> list(int offset, int limit) {
+        return questionMapper.select(c -> c.limit(limit).offset(offset));
     }
 }
