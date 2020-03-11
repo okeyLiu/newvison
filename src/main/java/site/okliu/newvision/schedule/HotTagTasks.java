@@ -28,7 +28,7 @@ public class HotTagTasks {
         this.questionService = questionService;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 1000*60*60*3)
     public void updateHotTags() {
         log.info("update hot tags at {}", LocalDateTime.now());
         // 获取所有问题，并计算问题的排序顺序权重

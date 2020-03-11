@@ -16,5 +16,6 @@
         <table tableName="question" />
         <table tableName="comment" />
         <table tableName="notification" />
+        <table tableName="ad" />
     </context>
 </generatorConfiguration>

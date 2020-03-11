@@ -1,7 +1,6 @@
 package site.okliu.newvision.dto;
 
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -16,7 +15,7 @@ public class HotTagDTO implements Comparable<HotTagDTO> {
     private Integer viewCount;
 
     @Override
-    public int compareTo(@NotNull HotTagDTO o) {
+    public int compareTo(HotTagDTO o) {
         return this.priority - o.priority;// 升序
     }
 
